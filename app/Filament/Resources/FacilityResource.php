@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AirportResource\Pages;
-use App\Filament\Resources\AirportResource\RelationManagers;
-use App\Models\Airport;
+use App\Filament\Resources\FacilityResource\Pages;
+use App\Filament\Resources\FacilityResource\RelationManagers;
+use App\Models\Facility;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,9 +13,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class AirportResource extends Resource
+class FacilityResource extends Resource
 {
-    protected static ?string $model = Airport::class;
+    protected static ?string $model = Facility::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -25,22 +25,15 @@ class AirportResource extends Resource
             ->schema([
                 Forms\Components\FileUpload::make('image')
                     ->image()
-                    ->directory('airports')
+                    ->directory('facilities')
                     ->required()
                     ->columnSpan('full'),
-                Forms\Components\TextInput::make('iata_code')
-                    ->required()
-                    ->maxLength(3)
-                    ->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('city')
+                Forms\Components\Textarea::make('description')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('country')
-                    ->required()
-                    ->maxLength(255),
+                    ->maxLength(65535)
             ]);
     }
 
@@ -51,22 +44,14 @@ class AirportResource extends Resource
                 Tables\Columns\ImageColumn::make('image')
                     ->label('Image')
                     ->size(50)
-                    ->disk('public')
-                    ->default('airports/default.png'),
-                Tables\Columns\TextColumn::make('iata_code')
-                    ->label('Iata Code')
-                    ->sortable()
-                    ->searchable(),
+                    ->disk('public'),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Name')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('city')
-                    ->label('City')
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('country')
-                    ->label('Country')
+                Tables\Columns\TextColumn::make('description')
+                    ->label('Description')
+                    ->limit(50)
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -105,9 +90,9 @@ class AirportResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAirports::route('/'),
-            'create' => Pages\CreateAirport::route('/create'),
-            'edit' => Pages\EditAirport::route('/{record}/edit'),
+            'index' => Pages\ListFacilities::route('/'),
+            'create' => Pages\CreateFacility::route('/create'),
+            'edit' => Pages\EditFacility::route('/{record}/edit'),
         ];
     }
 }

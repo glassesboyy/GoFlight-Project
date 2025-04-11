@@ -17,4 +17,9 @@ class Airport extends Model
         'city',
         'country',
     ];
+
+    public function flightSegments()
+    {
+        return $this->hasMany(FlightSegment::class);
+    }
 }

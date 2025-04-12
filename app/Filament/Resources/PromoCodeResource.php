@@ -67,9 +67,7 @@ class PromoCodeResource extends Resource
                 Tables\Columns\TextColumn::make('valid_until')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\IconColumn::make('is_used')
-                    ->boolean()
-                    ->sortable(),
+                Tables\Columns\ToggleColumn::make('is_used'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

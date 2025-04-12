@@ -37,8 +37,10 @@ class PromoCodeResource extends Resource
                     ->required()
                     ->numeric()
                     ->minValue(0)
-                    ->prefix(fn (string $context, ?string $state, $record) => 
-                        $record && $record->discount_type === 'percentage' ? '%' : 'Rp'),
+                    ->prefix(function ($get) {
+                        return $get('discount_type') === 'percentage' ? '%' : 'Rp';
+                    })
+                    ->live(),
                 Forms\Components\DateTimePicker::make('valid_until')
                     ->required(),
                 Forms\Components\Toggle::make('is_used')
@@ -57,9 +59,9 @@ class PromoCodeResource extends Resource
                     ->badge()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('discount')
-                    ->formatStateUsing(fn ($record) => 
-                        $record->discount_type === 'percentage' 
-                            ? $record->discount . '%' 
+                    ->formatStateUsing(fn ($record) =>
+                        $record->discount_type === 'percentage'
+                            ? $record->discount . '%'
                             : 'Rp ' . number_format($record->discount, 0, ',', '.'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('valid_until')

@@ -17,7 +17,7 @@ class FacilityResource extends Resource
 {
     protected static ?string $model = Facility::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-heart';
 
     public static function form(Form $form): Form
     {
@@ -55,15 +55,15 @@ class FacilityResource extends Resource
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Created At')
-                    ->sortable()
                     ->dateTime()
-                    ->default(now()),
+                    ->sortable()
+                    ->default(now())
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Updated At')
-                    ->sortable()
                     ->dateTime()
-                    ->default(now()),
+                    ->sortable()
+                    ->default(now())
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),

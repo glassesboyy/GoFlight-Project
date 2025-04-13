@@ -24,16 +24,19 @@ class PromoCodeResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('code')
+                    ->label('Promo Code')
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(255),
                 Forms\Components\Select::make('discount_type')
+                    ->label('Discount Type')
                     ->required()
                     ->options([
                         'percentage' => 'Percentage',
                         'fixed' => 'Fixed Amount',
                     ]),
                 Forms\Components\TextInput::make('discount')
+                    ->label('Discount Amount')
                     ->required()
                     ->numeric()
                     ->minValue(0)
@@ -42,8 +45,10 @@ class PromoCodeResource extends Resource
                     })
                     ->live(),
                 Forms\Components\DateTimePicker::make('valid_until')
+                    ->label('Valid Until')
                     ->required(),
                 Forms\Components\Toggle::make('is_used')
+                    ->label('Is Used')
                     ->required(),
             ]);
     }
@@ -53,27 +58,34 @@ class PromoCodeResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('code')
+                    ->label('Promo Code')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('discount_type')
+                    ->label('Discount Type')
                     ->badge()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('discount')
+                    ->label('Discount Amount')
                     ->formatStateUsing(fn ($record) =>
                         $record->discount_type === 'percentage'
                             ? $record->discount . '%'
                             : 'Rp ' . number_format($record->discount, 0, ',', '.'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('valid_until')
+                    ->label('Valid Until')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\ToggleColumn::make('is_used'),
+                Tables\Columns\ToggleColumn::make('is_used')
+                    ->label('Is Used'),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Created At')
                     ->dateTime()
                     ->sortable()
                     ->default(now())
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Updated At')
                     ->dateTime()
                     ->sortable()
                     ->default(now())

@@ -24,14 +24,17 @@ class FacilityResource extends Resource
         return $form
             ->schema([
                 Forms\Components\FileUpload::make('image')
+                    ->label('Facility Logo')
                     ->image()
                     ->directory('facilities')
                     ->required()
                     ->columnSpan('full'),
                 Forms\Components\TextInput::make('name')
+                    ->label('Facility Name')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('description')
+                    ->label('Description')
                     ->required()
                     ->maxLength(65535)
             ]);
@@ -42,11 +45,11 @@ class FacilityResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
-                    ->label('Image')
-                    ->size(50)
+                    ->label('Facility Logo')
+                    ->size(80)
                     ->disk('public'),
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Name')
+                    ->label('Facility Name')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
@@ -55,11 +58,13 @@ class FacilityResource extends Resource
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Created At')
                     ->dateTime()
                     ->sortable()
                     ->default(now())
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Updated At')
                     ->dateTime()
                     ->sortable()
                     ->default(now())

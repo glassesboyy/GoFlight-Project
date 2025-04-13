@@ -24,21 +24,26 @@ class AirportResource extends Resource
         return $form
             ->schema([
                 Forms\Components\FileUpload::make('image')
+                    ->label('Airport Image')
                     ->image()
                     ->directory('airports')
                     ->required()
                     ->columnSpan('full'),
                 Forms\Components\TextInput::make('iata_code')
+                    ->label('Iata Code')
                     ->required()
                     ->maxLength(3)
                     ->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('name')
+                    ->label('Airport Name')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('city')
+                    ->label('City')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('country')
+                    ->label('Country')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -49,7 +54,7 @@ class AirportResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
-                    ->label('Image')
+                    ->label('Airport Image')
                     ->size(50)
                     ->disk('public')
                     ->default('airports/default.png'),
@@ -58,7 +63,7 @@ class AirportResource extends Resource
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Name')
+                    ->label('Airport Name')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('city')
@@ -70,11 +75,13 @@ class AirportResource extends Resource
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Created At')
                     ->dateTime()
                     ->sortable()
                     ->default(now())
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Updated At')
                     ->dateTime()
                     ->sortable()
                     ->default(now())

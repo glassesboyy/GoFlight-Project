@@ -24,15 +24,18 @@ class AirlineResource extends Resource
         return $form
             ->schema([
                 Forms\Components\FileUpload::make('logo')
+                    ->label('Airline Logo')
                     ->image()
                     ->directory('airlines')
                     ->required()
                     ->columnSpan('full'),
                 Forms\Components\TextInput::make('code')
+                    ->label('Airline Code')
                     ->required()
                     ->maxLength(3)
                     ->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('name')
+                    ->label('Airline Name')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -56,11 +59,13 @@ class AirlineResource extends Resource
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Created At')
                     ->dateTime()
                     ->sortable()
                     ->default(now())
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Updated At')
                     ->dateTime()
                     ->sortable()
                     ->default(now())

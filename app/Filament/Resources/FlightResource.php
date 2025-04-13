@@ -41,7 +41,25 @@ class FlightResource extends Resource
                         ]),
                     Forms\Components\Wizard\Step::make('Flight Segments')
                         ->schema([
-                            // ...
+                            Forms\Components\Repeater::make('segments')
+                                ->relationship('flightSegments')
+                                ->schema([
+                                    Forms\Components\TextInput::make('sequence')
+                                        ->required()
+                                        ->numeric(),
+                                    Forms\Components\Select::make('airport_id')
+                                        ->label('Airport Name')
+                                        ->relationship('airport', 'name')
+                                        ->required()
+                                        ->preload()
+                                        ->searchable(),
+                                    Forms\Components\DateTimePicker::make('time')
+                                        ->required()
+                                        ->native(false),
+                                ])
+                                ->orderColumn('sequence')
+                                ->minItems(1)
+                                ->columns(3),
                         ]),
                     Forms\Components\Wizard\Step::make('Flight Class')
                         ->schema([

@@ -46,7 +46,8 @@ class PromoCodeResource extends Resource
                     ->live(),
                 Forms\Components\DateTimePicker::make('valid_until')
                     ->label('Valid Until')
-                    ->required(),
+                    ->required()
+                    ->native(false),
                 Forms\Components\Toggle::make('is_used')
                     ->label('Is Used')
                     ->required(),

@@ -12,6 +12,7 @@ class FlightSeat extends Model
 
     protected $fillable = [
         'flight_id',
+        'name', // INI NOTICE BANG (INI BARU)
         'row',
         'column',
         'class_type',

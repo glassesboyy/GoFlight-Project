@@ -63,7 +63,35 @@ class FlightResource extends Resource
                         ]),
                     Forms\Components\Wizard\Step::make('Flight Class')
                         ->schema([
-                            // ...
+                            Forms\Components\Repeater::make('flightClasses')
+                                ->relationship('flightClasses')
+                                ->schema([
+                                    Forms\Components\Select::make('class_type')
+                                        ->label('Class Type')
+                                        ->options([
+                                            'economy' => 'Economy',
+                                            'business' => 'Business',
+                                        ])
+                                        ->required(),
+                                    Forms\Components\TextInput::make('price')
+                                        ->label('Price')
+                                        ->numeric()
+                                        ->required()
+                                        ->minValue(1)
+                                        ->prefix('Rp'),
+                                    Forms\Components\TextInput::make('total_seats')
+                                        ->label('Total Seats')
+                                        ->numeric()
+                                        ->required()
+                                        ->minValue(1),
+                                    Forms\Components\Select::make('facilities')
+                                        ->multiple()
+                                        ->relationship('facilities', 'name')
+                                        ->preload()
+                                        ->searchable(),
+                                ])
+                                ->columns(4)
+                                ->minItems(1),
                         ]),
                 ])->columnSpan('full'),
             ]);

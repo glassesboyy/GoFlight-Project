@@ -101,13 +101,58 @@ class FlightResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('flight_number')
+                    ->label('Flight Number')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('airline.name')
+                    ->label('Airline Name')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('flightSegments.airport.name')
+                    ->label('Route & Directions')
+                    ->searchable()
+                    ->sortable()
+                    ->formatStateUsing(function (Flight $record): string {
+                        $firstSegment = $record->flightSegments->first();
+                        $lastSegment = $record->flightSegments->last();
+                        $route = $firstSegment->airport->iata_code . ' - ' . $lastSegment->airport->iata_code;
+                        $duration = (new \DateTime($firstSegment->time))->format('d F Y H:i') . ' - ' . (new \DateTime($lastSegment->time))->format('d F Y H:i');
+                        return $route . ' (' . $duration . ')';
+                    }),
+                Tables\Columns\TextColumn::make('flightClasses.class_type')
+                    ->label('Class Type')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable()
+                    ->formatStateUsing(function (Flight $record): string {
+                        return $record->flightClasses->pluck('class_type')->implode(', ');
+                    }),
+                Tables\Columns\TextColumn::make('flightClasses.total_seats')
+                    ->label('Total Seats')
+                    ->sortable()
+                    ->toggleable()
+                    ->formatStateUsing(function (Flight $record): string {
+                        return $record->flightClasses->sum('total_seats');
+                    }),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Created At')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Updated At')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

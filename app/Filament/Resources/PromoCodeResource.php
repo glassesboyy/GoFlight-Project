@@ -41,7 +41,7 @@ class PromoCodeResource extends Resource
                     ->numeric()
                     ->minValue(0)
                     ->prefix(function ($get) {
-                        return $get('discount_type') === 'percentage' ? '%' : 'Rp';
+                        return $get('discount_type') === 'percentage' ? '%' : 'IDR';
                     })
                     ->live(),
                 Forms\Components\DateTimePicker::make('valid_until')
@@ -71,7 +71,7 @@ class PromoCodeResource extends Resource
                     ->formatStateUsing(fn ($record) =>
                         $record->discount_type === 'percentage'
                             ? $record->discount . '%'
-                            : 'Rp ' . number_format($record->discount, 0, ',', '.'))
+                            : 'IDR ' . number_format($record->discount, 0, ',', '.'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('valid_until')
                     ->label('Valid Until')

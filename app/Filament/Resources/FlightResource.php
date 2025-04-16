@@ -78,7 +78,7 @@ class FlightResource extends Resource
                                         ->numeric()
                                         ->required()
                                         ->minValue(1)
-                                        ->prefix('Rp'),
+                                        ->prefix('IDR'),
                                     Forms\Components\TextInput::make('total_seats')
                                         ->label('Total Seats')
                                         ->numeric()

@@ -23,12 +23,8 @@ class TransactionResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('General Information')
+                Forms\Components\Section::make('Flight Information')
                     ->schema([
-                        Forms\Components\TextInput::make('code')
-                            ->required()
-                            ->maxLength(255)
-                            ->label('Transaction Code'),
                         Forms\Components\Select::make('flight_id')
                             ->relationship('flight', 'flight_number')
                             ->required()
@@ -38,43 +34,60 @@ class TransactionResource extends Resource
                             ->required()
                             ->label('Flight Class'),
                     ]),
-                Forms\Components\Section::make('Passenger Information')
+                Forms\Components\Section::make('Contact Information')
                     ->schema([
-                        Forms\Components\Section::make('Passenger List')
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->label('Contact Person Name'),
+                        Forms\Components\TextInput::make('email')
+                            ->required()
+                            ->email()
+                            ->label('Contact Email'),
+                        Forms\Components\TextInput::make('phone')
+                            ->required()
+                            ->tel()
+                            ->label('Contact Phone Number'),
+                    ]),
+                Forms\Components\Section::make('Passenger Details')
+                    ->schema([
+                        Forms\Components\TextInput::make('number_of_passengers')
+                            ->required()
+                            ->numeric()
+                            ->minValue(1)
+                            ->label('Number of Passengers'),
+                        Forms\Components\Repeater::make('transactionPassengers')
+                            ->relationship()
                             ->schema([
+                                Forms\Components\Select::make('flight_seat_id')
+                                    ->relationship('flightSeat', 'name')
+                                    ->required()
+                                    ->label('Seat Number'),
                                 Forms\Components\TextInput::make('name')
-                                ->required()
-                                ->numeric()
-                                ->label('Name'),
-                                Forms\Components\TextInput::make('email')
-                                ->required()
-                                ->numeric()
-                                ->label('Email'),
-                                Forms\Components\TextInput::make('phone')
-                                ->required()
-                                ->numeric()
-                                ->label('Phone Number'),
-                                Forms\Components\Repeater::make('transactionPassengers')
-                                    ->relationship()
-                                    ->schema([
-                                        Forms\Components\Select::make('flight_seat_id')
-                                            ->relationship('flightSeat', 'name')
-                                            ->required()
-                                            ->label('Seat Number'),
-                                        Forms\Components\TextInput::make('name')
-                                            ->required()
-                                            ->maxLength(255)
-                                            ->label('Passenger Name'),
-                                        Forms\Components\DatePicker::make('date_of_birth')
-                                            ->required()
-                                            ->label('Date of Birth'),
-                                        Forms\Components\TextInput::make('nationality')
-                                            ->required()
-                                            ->maxLength(255)
-                                            ->label('Nationality'),
-                                    ])
-                                    ->columns(2)
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->label('Passenger Name'),
+                                Forms\Components\DatePicker::make('date_of_birth')
+                                    ->required()
+                                    ->label('Date of Birth'),
+                                Forms\Components\TextInput::make('nationality')
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->label('Nationality'),
                             ])
+                            ->columns(2)
+                    ]),
+                Forms\Components\Section::make('Promo & Payment')
+                    ->schema([
+                        Forms\Components\TextInput::make('promo_code')
+                            ->label('Promo Code'),
+                        Forms\Components\TextInput::make('subtotal')
+                            ->disabled()
+                            ->label('Subtotal')
+                            ->prefix('IDR'),
+                        Forms\Components\TextInput::make('grandtotal')
+                            ->disabled()
+                            ->label('Grand Total')
+                            ->prefix('IDR'),
                     ])
             ]);
     }
@@ -113,11 +126,11 @@ class TransactionResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('subtotal')
                     ->label('Subtotal')
-                    ->money('Rp')
+                    ->prefix('IDR')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('grandtotal')
                     ->label('Grand Total')
-                    ->money('Rp')
+                    ->prefix('IDR')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Created At')
